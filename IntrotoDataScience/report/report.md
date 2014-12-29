@@ -1,0 +1,90 @@
+---
+title: "Project 1"
+author: "Kevin Spring"
+---
+
+## Short Questions
+
+### Section 1. Statistical Test
+
+1. Which statistical test did you use to analyze the NYC subway data? Did you use a one-tail or a two-tail P value? What is the null hypothesis?
+
+Since the NYC ridership data is not normally distributed I used the Mann Whitney U-test to analyze the ridership between when it was rainy or not rainy. A one-tail p-value was caluclated using the null hypothesis that there is no difference in ridership when the weather is rainy or not rainy.
+
+2. Why is this statistical test applicable to the dataset?
+
+The Mann-Whitney Test is a nonparametric test which is used for hypothesis testing on non-normal distributions. Parametric tests such as a z-test or a Student t-test have the assumption that the test statistic follows a normal distribution or approximatly normal distribution. Since the NYC subway ridership data does not follow a normal distribution and instead of a t-test the nonparametric equivalent, the Mann-Whitney U-test, was used.
+
+3. What results did you get from this statistical test? These should include the following numerical values: p-values, as well as the means for each of the two samples under test.
+
+p-value: 0.02499
+mean rain: 1105.4
+mean no rain: 1090.3
+U-statistic: 1924409167
+
+4. What is the significance and interpretation of these results?
+
+The p-value was less than 0.05. This indicates that we should reject the null hypothesis that there is no difference in ridership when the weather is rainy or not rainy. There is a significant difference between ridership in raining and non-rainy time periods.
+
+
+### Section 2. Linear Regression
+
+1. What approach did you use to compute the coefficients theta and produce prediction for ENTRIESn_hourly in your regression model:
+	- Gradient descent (as implemented in exercise 3.5)
+	- OLS using Statsmodels
+	- Or something different?
+
+I used gradient descent to compute theta and produce predictions for hourly entries.
+
+2. What features (input variables) did you use in your model? Did you use any dummy variables as part of your features?
+
+As I am interested in how weather impacts subway ridership I included rain, the minimum temperature, the maximum temperature, the hour, and the turnstile unit. The turnstile unit is a dummy variable. Rain is also a dummy variable but since the coding for no rain is 0 and rain is 1 the dummy coding is already set.
+
+3. Why did you select these features in your model? We are looking for specific reasons that lead you to believe that the selected features will contribute to the predictive power of your model. Your reasons might be based on intuition. For example,  response for fog might be: “I decided to use fog because I thought that when it is very foggy outside people might decide to use the subway more often.” Your reasons might also be based on data exploration and experimentation, for example: “I used feature X because as soon as I included it in my model, it drastically improved my R2 value.”
+
+I did multiple R^2 measurements on different features to choose the features that would be best to include in the linear model. I inlucded hour and unit to take into account time of day and station location on ridership. Some stations may serve a larger population and the time of day is a good predictor on the use of ridership because more people will use the subway when they are active in the day. I started with all of the features and determined how removing them would impact R^2. I wanted to include fog in the features but I was getting a result of nan after the prediction calculation. This is most likely do to the implementation of the prediction function for the Udacity grader. It only takes 10% of the dataset which may not include two different variables for fog. In the data thunder is the same value for all the measurements so it is not useful. Including all the features except fog, thunder, date, and time resulted in an R^2 value of about 0.47. Including only unit, rain, hour, minimum temperature, and maximum temperature also resulted in a R^2 value of about 0.47.
+
+
+4. What is your model’s R2 (coefficients of determination) value?
+What does this R2 value mean for the goodness of fit for your regression model? 
+
+R^2 is about 0.47 for my model. R^2 is a measure of how well the data fit my statistical model. This indicates that the model explains about half the variability of the responses.
+
+5. Do you think this linear model to predict ridership is appropriate for this dataset, given this R2 value?
+
+In explaining human behavior R^2 values below 0.5 is acceptable because many features would be required to explain 100% of the variability. This R^2 value is very good considering the data only contains weather conditions for the entire New York City area and the number of riders.
+
+### Section 3. Visualization
+
+Please include two visualizations that show the relationships between two or more variables in the NYC subway data. You should feel free to implement something that we discussed in class (e.g., scatter plots, line plots, or histograms) or attempt to implement something more advanced if you'd like.
+
+Remember to add appropriate titles and axes labels to your
+plots. Also, please add a short description below each figure commenting on the key insights depicted in the figure.
+
+1. One visualization should contain two histograms: one of  ENTRIESn_hourly for rainy days and one of ENTRIESn_hourly for non-rainy days. You can combine the two histograms in a single plot or you can use two different plots.
+
+	- For the histogram, you should have intervals representing the volume of ridership (value of ENTRIESn_hourly) on the x-axis and the frequency of occurrence on the y-axis. For example, you might have one interval (along the x-axis) with values from 0 to 1000. The height of the bar for this interval will then represent the number of records (rows in our data) that have ENTRIESn_hourly that fall into this interval.
+
+	- Remember to increase the number of bins in the histogram (by having larger number of bars). The default bin width is not sufficient to capture the variability in the two samples.
+
+2. One visualization can be more freeform, some suggestions are:
+	- Ridership by time-of-day or day-of-week
+	- How ridership varies by subway station
+	- Which stations have more exits or entries at different times of day
+
+### Section 4
+
+1. From your analysis and interpretation of the data, do more people ride
+the NYC subway when it is raining versus when it is not raining?  
+
+2. What analyses lead you to this conclusion?
+
+My analysis indicates that there is a significant difference in ridership between times of rain and no rain. The first analysis I did was to visually inspect the frequency of the number of entries. This histogram showed that the data is not normally distributed. Log transforming the number of entries resulted in a negatively skewed distribution so parametric testing could not be done. Also, the data was plotted to visually determine the magnitude of difference between ridership during rain and no rain. The total number of riders in no rain conditions is almost twice as much as the number of riders in rain conditions. To perform a nonparametric hypothesis testing to determine if there is a difference in ridership between rain and no rain weather on ridership I performed a Mann Whitney U-test. This test gave a p-value of less than 0.05, which indicates that the null hypothesis is rejected. The linear regression with gradient descent resulted in a R^2 value of about 0.47, which indicates a good fit for the linear model using the factors of unit, time, minimum temperature, maximum temperature, and rain indicator.
+
+### Section 5
+
+1. Please discuss potential shortcomings of the data set and the methods 
+of your analysis.
+
+One possible shortcoming is that the weather data is city wide and not localized to the individual subway station. It is not unthinkable to have rain in one part of a city and not in another. Futher analysis could be done to see if ridership increases after rain stops. It is likely that people are delaying their transportation on the subway until rainning has stopped. One possible way to analyze this is to subset the current data into where the data shows that there is no rain at all in a daily period, rain starts and then stops within a day, and days where it rains continuously. This type of analysis would give greater predictive value to a model of when people are more likely to ride on the subway to increase capacity. As for the linear model, the R^2 value for the model is sufficient but confounding factors was not analzyed. Also, the data only assumed to have a linear relationship but this analysis was not done.
+
